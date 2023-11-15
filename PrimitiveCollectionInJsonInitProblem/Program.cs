@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PrimitiveCollectionInJsonInitProblem;
 
+TestContext.UseSqlite = false;
+
 await using (var ctx = new TestContext())
 {
     await ctx.Database.EnsureDeletedAsync();

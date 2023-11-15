@@ -22,20 +22,21 @@ public class Visits
 
 internal class TestContext : DbContext
 {
+    public static bool UseSqlite { get; set; }
     public DbSet<Pub> Pubs => Set<Pub>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            @"Server=localhost,5433;Initial Catalog=PrimitiveCollectionsProblem;User Id=sa;Password=Pass@word;TrustServerCertificate=true");
+        if (UseSqlite)
+            optionsBuilder.UseSqlite("DataSource=sqlite.db");
+        else
+            optionsBuilder.UseSqlServer(
+                "Server=localhost,5433;Initial Catalog=PrimitiveCollectionsProblem;User Id=sa;Password=Pass@word;TrustServerCertificate=true");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Pub>(
-            b =>
-            {
-                b.OwnsOne(e => e.Visits).ToJson();
-            });
+            b => { b.OwnsOne(e => e.Visits).ToJson(); });
     }
 }
